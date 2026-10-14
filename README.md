@@ -1,16 +1,23 @@
 # Bubble Trouble
 
-A browser arcade game with a Hebrew interface, bouncing and splitting bubbles, harpoons, levels, lives, optional sound and touch controls.
+Browser arcade game with Hebrew UI, customizable classroom, space and magic themes, and local cooperative play.
 
-## Controls
+## Play
 
-- Arrow keys or A / D: move
-- Space: fire
-- P: pause
-- Enter: start or restart
+https://adinassi.github.io/my_repo/
 
-## GitHub Pages
+Choose a preset or independently select the background, hero, projectile and targets before starting.
 
-In Settings → Pages, select **Deploy from a branch**, choose **master** and **/ (root)**, then Save.
+Solo: arrows or A/D to move, Space to fire. Touch controls are available.
 
-No build step or installation is required. The site uses index.html, style.css and game.js.
+Two players on one keyboard: P1 uses arrows and Space; P2 uses A/D and W. Three lives and score are shared.
+
+P pauses. The help button pauses active play and restores it when closed. Design selection begins a new round.
+
+## Files and deployment
+
+The repository root contains index.html, game.js and style.css. GitHub Pages publishes master at the root. When JS or CSS changes, update the asset content hashes in index.html to avoid stale browser caches.
+
+## Tests
+
+Run node tests/game.test.cjs. Tests cover cooperative movement and shooting, help pause/resume, 27 visual combinations and solo reset.
