@@ -1,29 +1,29 @@
 <!doctype html>
 <html lang="he" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bubble Trouble — Arcade</title><link rel="stylesheet" href="style.css?v=17a274e91a14"></head>
-<body>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bubble Trouble — Arcade</title><link rel="stylesheet" href="style.css?v=2fac508e8d1e"></head>
+<body data-screen="setup">
 <main>
 <header><a class="brand" href="./"><span class="brand-icon">🔥</span> BUBBLE TROUBLE</a><span class="tag">🎮 🔥 🎮</span></header>
-<section class="heading"><div><p class="eyebrow">עולם אחד? למה לבחור.</p><h1>בוחרות עולם.<br><span>הישארו במשחק.</span></h1></div><p class="intro">לבד או ביחד, בכל שילוב שתרצו.<br>בחרו דמות, ירייה ורקע — וצאו לשבור שיאים.</p></section>
+
 <section id="setupPanel" class="setup-panel" aria-labelledby="setupTitle">
 <div class="setup-top"><div><span class="eyebrow">לפני שמתחילים</span><h2 id="setupTitle">בוחרות את ההרפתקה</h2></div><button id="introHelpBtn" class="secondary icon-button" aria-label="הנחיות משחק" title="הנחיות משחק">📖</button></div>
-<p class="setup-desc">בחרו סט מוכן, או ערבבו דמות, ירייה, מטרות ורקע.</p>
+<div class="menu-layout"><aside class="avatar-card"><span class="avatar-badge">🔥 PLAYER SELECT 🔥</span><canvas id="avatarPreview" width="360" height="260" aria-label="תצוגה מקדימה של הדמויות"></canvas><div class="avatar-caption">ההרפתקה שלכן מתחילה כאן</div><div class="control-map"><span>⬅️ P2 · A / D + W</span><span>P1 · ← / → + SPACE ➡️</span></div></aside><div class="menu-content">
 <div class="presets"><button data-preset="classroom" title="הכיתה הקופצת" aria-label="סט כיתה"><span>🎓</span><small>👨‍🏫 🖍️ 🧑‍🎓</small></button><button data-preset="space" title="מסע בחלל" aria-label="סט חלל"><span>🪐</span><small>🧑‍🚀 ⚡ 👽</small></button><button data-preset="castle" title="ממלכת הקסם" aria-label="סט ממלכה"><span>🏰</span><small>🧙 ✨ 🔮</small></button></div>
 <div class="choices"><label>מצב משחק<select id="mode"><option value="solo">שחקן אחד</option><option value="duo">זוג — אותה מקלדת</option></select></label><label>רקע<select id="background"><option value="classroom">לוח נוסחאות</option><option value="space">חלל וכוכבים</option><option value="castle">ממלכה לילית</option></select></label><label>מי יורה<select id="hero"><option value="lecturer">מרצה</option><option value="astronaut">אסטרונאוט</option><option value="wizard">קוסם</option></select></label><label>מה יורים<select id="shot"><option value="chalk">גירים</option><option value="laser">לייזר</option><option value="magic">כוכבי קסם</option></select></label><label>מה קופץ<select id="target"><option value="students">ראשי סטודנטים</option><option value="aliens">חייזרים</option><option value="orbs">כדורי קסם</option></select></label></div>
-<div class="quick-guide"><b>המטרה:</b> פצלו את כל המטרות עד שהן נעלמות, והתחמקו מהן. <b>לבד:</b> חצים או A/D לתנועה, רווח לירי. <b>בזוג:</b> P1 — חצים ורווח; P2 — A/D ו־W לירי. הניקוד ו־3 החיים משותפים. מצב זוגי דורש מקלדת.</div>
-<button id="beginBtn" class="primary icon-button" title="תחילת המשחק" aria-label="תחילת המשחק">▶️</button>
+
+</div></div><div class="menu-actions"><span>בחרו סט או ערבבו בין העיצובים · 📖 להנחיות</span><button id="beginBtn" class="primary icon-button" title="תחילת המשחק" aria-label="תחילת המשחק">▶️</button></div>
 </section>
-<section class="arcade" aria-label="משחק Bubble Trouble">
+<section id="gamePanel" class="arcade" aria-label="משחק Bubble Trouble">
 <div class="hud"><div><small title="ניקוד" aria-label="ניקוד">⭐</small><strong id="score">0</strong></div><div><small title="שלב" aria-label="שלב">🏁</small><strong id="level">01</strong></div><div><small title="חיים" aria-label="חיים">❤️</small><strong id="lives">♥ ♥ ♥</strong></div><button id="helpBtn" class="help-button icon-button" aria-label="הנחיות משחק" title="הנחיות משחק">📖</button><span id="effects" class="effects" role="status" aria-label="בונוסים פעילים" hidden></span><div class="best"><small title="השיא שלך" aria-label="השיא שלך">🏆</small><strong id="best">0</strong></div></div>
 <div class="stage"><canvas tabindex="0" id="game" width="960" height="540" aria-label="זירת המשחק"></canvas><div id="overlay"><span class="pill">🔥 READY TO PLAY 🔥</span><h2 id="overlayTitle">כל בועה היא התחלה חדשה</h2><p id="overlayText">זוזו, ירו ופצלו את כל הבועות כדי לעבור לשלב הבא.</p><button id="startBtn" class="primary icon-button" title="התחלה או המשך" aria-label="התחלה או המשך">▶️</button></div></div>
-<div class="toolbar"><span class="live"><i></i> תנועה. ירייה. עוד ניסיון.</span><div><button id="soundBtn" class="icon-button" title="הפעלת או כיבוי צליל" aria-label="הפעלת או כיבוי צליל">🔇</button><button id="pauseBtn" class="icon-button" title="השהיה או המשך" aria-label="השהיה או המשך">⏸️</button><button id="settingsBtn" class="icon-button" title="בחירת עיצוב" aria-label="בחירת עיצוב">✏️</button><button id="restartBtn" class="icon-button" title="התחלה מחדש" aria-label="התחלה מחדש">🔄</button></div></div>
+<div class="toolbar"><span class="live">⏳ ⚡</span><div><button id="soundBtn" class="icon-button" title="הפעלת או כיבוי צליל" aria-label="הפעלת או כיבוי צליל">🔇</button><button id="pauseBtn" class="icon-button" title="השהיה או המשך" aria-label="השהיה או המשך">⏸️</button><button id="settingsBtn" class="icon-button" title="בחירת עיצוב" aria-label="בחירת עיצוב">✏️</button><button id="restartBtn" class="icon-button" title="התחלה מחדש" aria-label="התחלה מחדש">🔄</button></div></div>
 </section>
 <div class="touch"><button id="rightBtn" class="icon-button" title="ימינה" aria-label="ימינה">➡️</button><button id="fireBtn" class="icon-button" title="ירי" aria-label="ירי">🚀</button><button id="leftBtn" class="icon-button" title="שמאלה" aria-label="שמאלה">⬅️</button></div>
-<section class="instructions"><div><span>01</span><p><b>זוזו בחופשיות</b><br><kbd>←</kbd> <kbd>→</kbd> או A / D</p></div><div><span>02</span><p><b>תכוונו למעלה</b><br><kbd>SPACE</kbd> כדי לירות</p></div><div><span>03</span><p><b>שמרו על החיים</b><br>המטרות מתפצלות. התחמקו מהן.</p></div></section>
-<footer><span>BUILT FOR ONE MORE ROUND.</span><span>גרסת ארקייד • נבנה בעזרת סוכני AI</span></footer>
+
+
 <dialog id="helpDialog" aria-labelledby="helpTitle"><div class="help-top"><span>📖</span><h2 id="helpTitle">ספר המשחק</h2><button id="closeHelp" class="icon-button" aria-label="סגירת ההנחיות" title="חזרה למשחק">❌</button></div>
 <div class="guide-card"><span class="guide-icon">🎯</span><div><h3>מפצלים, מתחמקים, מנצחים</h3><p>יורים למעלה. המטרות הגדולות מתפצלות לשתיים והקטנות נעלמות. פנו את הזירה כדי לעבור שלב.</p></div></div>
 <div class="guide-card"><span class="guide-icon">🎮</span><div><h3>משחק לבד</h3><p><kbd>←</kbd> <kbd>→</kbd> או <kbd>A</kbd> <kbd>D</kbd> לתנועה · <kbd>SPACE</kbd> לירי. אפשר להחזיק את מקש הירי. בטלפון משתמשים בכפתורים שמתחת לזירה.</p></div></div>
-<div class="guide-card"><span class="guide-icon">👥</span><div><h3>שניים על אותה מקלדת</h3><p><b>P1:</b> חצים + רווח לירי.<br><b>P2:</b> A / D + W לירי.<br>ניקוד ו־3 חיים משותפים. פגיעה באחד מורידה חיים לקבוצה.</p></div></div>
+<div class="guide-card"><span class="guide-icon">👥</span><div><h3>שניים על אותה מקלדת</h3><p><b>P1 — הדמות הימנית:</b> חצים + רווח לירי.<br><b>P2 — הדמות השמאלית:</b> A / D + W לירי.<br>ניקוד ו־3 חיים משותפים. פגיעה באחד מורידה חיים לקבוצה.</p></div></div>
 <div class="bonus-guide"><div><span>⏳</span><h3>זמן איטי</h3><p>אספו שעון שנופל מהמטרות כדי להאט אותן ל־8 שניות.</p></div><div><span>⚡</span><h3>ירי כפול</h3><p>אספו ברק כדי לירות שתי יריות יחד במשך 8 שניות.</p></div></div>
-<p class="help-note">הבונוסים נופלים מדי כמה פגיעות ונאספים במגע. ההנחיות עוצרות את המשחק. סגרו כדי להמשיך. <kbd>P</kbd> להשהיה.</p></dialog></main><script src="game.js?v=57971458326d"></script></body></html>
+<p class="help-note">הבונוסים נופלים מדי כמה פגיעות ונאספים במגע. ההנחיות עוצרות את המשחק. סגרו כדי להמשיך. <kbd>P</kbd> להשהיה.</p></dialog></main><script src="game.js?v=cc3555fb7753"></script></body></html>

@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+let ctx = canvas.getContext('2d');
 const W=960,H=560,FLOOR=500;
 canvas.width=W; canvas.height=H;
 const $=id=>document.getElementById(id);
@@ -16,7 +16,7 @@ const activePlayers=()=>config.mode==='duo'?[player,player2]:[player];
 let helpPrevious='ready';
 function clearKeys(){keys.clear();}
 function readConfig(){for(const name of Object.keys(config))config[name]=$(name).value;setup();}
-function showSetup(){clearKeys();state='ready';$('setupPanel').hidden=false;setup();overlay('בוחרים ויוצאים לדרך','בחרו עיצוב ומצב משחק למעלה. אפשר לערבב בין כל הסטים.');$('setupPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function showSetup(){clearKeys();state='ready';document.body.dataset.screen='setup';$('setupPanel').hidden=false;setup();overlay('בוחרים ויוצאים לדרך','בחרו עיצוב ומצב משחק למעלה. אפשר לערבב בין כל הסטים.');}
 function showHelp(){if($('helpDialog').open)return;helpPrevious=state;clearKeys();if(state==='playing')state='help';$('helpDialog').showModal();}
 function closeHelp(){if($('helpDialog').open)$('helpDialog').close();if(state==='help')state=helpPrevious;clearKeys();if(state==='playing'||state==='paused')canvas.focus();}
 
@@ -29,8 +29,8 @@ function collectBonus(d){if(d.type==='slow')slowTime=8;else doubleTime=8;tone(d.
 function overlay(title,text){if($('overlay'))$('overlay').hidden=false;if($('overlayTitle'))$('overlayTitle').textContent=title;if($('overlayText'))$('overlayText').textContent=text;if($('startBtn'))$('startBtn').textContent=state==='paused'?'▶️':state==='over'?'🔄':'▶️';}
 function hide(){if($('overlay'))$('overlay').hidden=true;canvas.focus();}
 function bubble(x,y,size,vx){return {x,y,size,r:radii[size],vx,vy:-260-size*65,variant:studentSerial++%6};}
-function setup(){bubbles=[];ropes=[];drops=[];slowTime=0;doubleTime=0;player.x=config.mode==='duo'?W*.3:W/2;player2.x=W*.7;activePlayers().forEach(p=>p.cooldown=0);invincible=1.5;transition=0;const count=Math.min(2+Math.floor((level-1)/2),6);for(let i=0;i<count;i++)bubbles.push(bubble(100+i*(W-200)/Math.max(1,count-1),100+(i%2)*65,Math.min(3,1+Math.floor(level/2)),(i%2?1:-1)*(115+level*8)));hud();}
-function start(){popCount=0;studentSerial=0;score=0;level=1;lives=3;time=0;cooldown=0;particles=[];clearKeys();setup();state='playing';$('setupPanel').hidden=true;hide();if($('pauseBtn'))$('pauseBtn').textContent='⏸️';canvas.focus();canvas.scrollIntoView({behavior:'smooth',block:'center'});}
+function setup(){bubbles=[];ropes=[];drops=[];slowTime=0;doubleTime=0;player.x=config.mode==='duo'?W*.7:W/2;player2.x=W*.3;activePlayers().forEach(p=>p.cooldown=0);invincible=1.5;transition=0;const count=Math.min(2+Math.floor((level-1)/2),6);for(let i=0;i<count;i++)bubbles.push(bubble(100+i*(W-200)/Math.max(1,count-1),100+(i%2)*65,Math.min(3,1+Math.floor(level/2)),(i%2?1:-1)*(115+level*8)));hud();}
+function start(){popCount=0;studentSerial=0;score=0;level=1;lives=3;time=0;cooldown=0;particles=[];clearKeys();setup();state='playing';document.body.dataset.screen='game';$('setupPanel').hidden=true;hide();if($('pauseBtn'))$('pauseBtn').textContent='⏸️';canvas.focus();}
 function pause(){clearKeys();if(state==='playing'){state='paused';overlay('הפסקה קטנה','לחצו על ▶️ או על P כדי לחזור למשחק');}else if(state==='paused'){state='playing';hide();}if($('pauseBtn'))$('pauseBtn').textContent=state==='paused'?'▶️':'⏸️';}
 function burst(b){for(let i=0;i<14;i++){const a=Math.random()*Math.PI*2,s=60+Math.random()*150;particles.push({x:b.x,y:b.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.6,color:colors[b.size]});}}
 function record(){if(score>best){best=score;try{localStorage.setItem('bubbleTroubleBest',String(best));}catch(e){}}hud();}
@@ -81,8 +81,9 @@ function hero(p){
  ctx.fillStyle=material(-1,-48,34,...suit);roundRect(-21,-67,42,43,12);ctx.fill();
  ctx.strokeStyle=suit[2];ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,-55);ctx.lineTo(0,-27);ctx.stroke();
  for(const side of [-1,1]){ctx.save();ctx.translate(side*24,-51);ctx.rotate(side*.18);ctx.fillStyle=material(0,0,20,...suit);roundRect(-7,-12,14,31,6);ctx.fill();ellipse(0,22,6,7,material(0,22,8,'#ffe5c7','#e7b68c','#9e7052'));ctx.restore();}
- if(config.hero==='lecturer'){ctx.fillStyle='#fff7ea';ctx.beginPath();ctx.moveTo(-9,-67);ctx.lineTo(9,-67);ctx.lineTo(0,-40);ctx.closePath();ctx.fill();ctx.fillStyle='#a74145';ctx.beginPath();ctx.moveTo(0,-64);ctx.lineTo(-4,-48);ctx.lineTo(0,-42);ctx.lineTo(4,-48);ctx.closePath();ctx.fill();ctx.fillStyle=material(-27,-32,16,'#87b5b0','#37666a','#183b47');roundRect(-35,-46,17,25,3);ctx.fill();ctx.fillStyle='#eee7d3';ctx.fillRect(-32,-42,11,2);}
- face(0,-83,21,config.hero==='lecturer'?0:2,config.hero==='lecturer');
+ if(config.hero==='lecturer'){ctx.fillStyle='#fff7ea';ctx.beginPath();ctx.moveTo(-9,-67);ctx.lineTo(9,-67);ctx.lineTo(0,-40);ctx.closePath();ctx.fill();ctx.fillStyle=p.id===2?'#ebb669':'#a74145';ctx.beginPath();ctx.moveTo(0,-64);ctx.lineTo(-4,-48);ctx.lineTo(0,-42);ctx.lineTo(4,-48);ctx.closePath();ctx.fill();ctx.fillStyle=material(-27,-32,16,'#87b5b0','#37666a','#183b47');roundRect(-35,-46,17,25,3);ctx.fill();ctx.fillStyle='#eee7d3';ctx.fillRect(-32,-42,11,2);}
+ if(p.id===2){ellipse(-15,-74,9,23,material(-15,-78,22,'#d6a875','#9b6340','#593525'));ellipse(15,-74,9,23,'#835335');}
+ face(0,-83,21,p.id===2?4:0,config.hero==='lecturer'&&p.id===1);
  if(config.hero==='astronaut'){ctx.strokeStyle='#e9f7ff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-84,25,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#acdcff22';ctx.beginPath();ctx.arc(0,-84,24,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff9';ctx.lineWidth=3;ctx.beginPath();ctx.arc(-1,-85,20,3.7,4.7);ctx.stroke();ctx.fillStyle='#eea760';roundRect(-10,-53,20,12,3);ctx.fill();}
  if(config.hero==='wizard'){ctx.fillStyle=material(0,-109,32,'#c1aae8','#7762ac','#3c2b68');ctx.beginPath();ctx.moveTo(-26,-96);ctx.quadraticCurveTo(-15,-115,0,-140);ctx.quadraticCurveTo(18,-123,22,-96);ctx.closePath();ctx.fill();ellipse(0,-98,29,5,suit[1]);ctx.fillStyle='#ffe8a4';ctx.font='15px serif';ctx.textAlign='center';ctx.fillText('✦',0,-111);ctx.fillStyle='#8b6246';roundRect(30,-84,5,77,2);ctx.fill();ellipse(32,-87,8,10,material(32,-87,11,'#fffbd5','#f4d18d','#b98842'));}
  if(config.hero==='lecturer'){ctx.fillStyle='#fffce8';roundRect(24,-31,6,20,2);ctx.fill();}
@@ -112,7 +113,8 @@ for(const d of drops){ctx.save();ctx.shadowColor=d.type==='slow'?'#8de6ff':'#ffe
  for(const p of activePlayers()){if(invincible<=0||Math.floor(invincible*10)%2===0||state==='ready')hero(p);if(config.mode==='duo'){ctx.textAlign='center';ctx.font='bold 18px sans-serif';ctx.fillStyle=p.id===1?'#9ce6ff':'#ffb7d5';ctx.fillText('P'+p.id,p.x,FLOOR+28);}}
  if(transition>0){ctx.textAlign='center';ctx.font='bold 34px sans-serif';ctx.fillStyle='#fff2c5';ctx.fillText('שלב '+level+' הושלם!',W/2,H/2);}
 }
-function frame(now){const dt=Math.min((now-last)/1000,.033)||0;last=now;update(dt);draw();requestAnimationFrame(frame);}
+function preview(){const c=$('avatarPreview');if(!c||state!=='ready')return;const mainContext=ctx;ctx=c.getContext('2d');ctx.clearRect(0,0,360,260);const glow=ctx.createRadialGradient(180,135,10,180,135,170);glow.addColorStop(0,'#efd49333');glow.addColorStop(1,'#111a2900');ctx.fillStyle=glow;ctx.fillRect(0,0,360,260);ctx.save();ctx.scale(1.6,1.6);ctx.translate(0,-340);hero({...player,x:config.mode==='duo'?155:112});if(config.mode==='duo')hero({...player2,x:65});ctx.restore();ctx=mainContext;}
+function frame(now){const dt=Math.min((now-last)/1000,.033)||0;last=now;update(dt);draw();preview();requestAnimationFrame(frame);}
 window.addEventListener('keydown',e=>{
  if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)||$('helpDialog').open)return;
  const k=e.code;if(['ArrowLeft','ArrowRight','Space','KeyA','KeyD','KeyW'].includes(k))e.preventDefault();
