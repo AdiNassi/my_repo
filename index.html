@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bubble Trouble — Arcade</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main>
+<header><a class="brand" href="./"><span class="brand-icon">◉</span> BUBBLE TROUBLE</a><span class="tag">ARCADE / 01</span></header>
+<section class="heading"><div><p class="eyebrow">קטנות יותר. מהירות יותר. מסוכנות יותר.</p><h1>פוצצו את הבועות.<br><span>הישארו במשחק.</span></h1></div><p class="intro">קלאסיקת ארקייד עם טוויסט ניאוני.<br>צלצל אחד, בועות בלי סוף, ומקום לשיא חדש.</p></section>
+<section class="arcade" aria-label="משחק Bubble Trouble">
+<div class="hud"><div><small>ניקוד</small><strong id="score">0</strong></div><div><small>שלב</small><strong id="level">01</strong></div><div><small>חיים</small><strong id="lives">♥ ♥ ♥</strong></div><div class="best"><small>השיא שלך</small><strong id="best">0</strong></div></div>
+<div class="stage"><canvas id="game" width="960" height="540" aria-label="זירת המשחק"></canvas><div id="overlay"><span class="pill">READY PLAYER ONE</span><h2 id="overlayTitle">כל בועה היא התחלה חדשה</h2><p id="overlayText">זוזו, ירו ופצלו את כל הבועות כדי לעבור לשלב הבא.</p><button id="startBtn" class="primary">מתחילים לשחק <span>←</span></button></div></div>
+<div class="toolbar"><span class="live"><i></i> תנועה. ירייה. עוד ניסיון.</span><div><button id="soundBtn" aria-label="צליל">צליל: כבוי</button><button id="pauseBtn">השהיה</button><button id="restartBtn">התחלה מחדש ↻</button></div></div>
+</section>
+<div class="touch"><button id="rightBtn" aria-label="ימינה">→</button><button id="fireBtn">ירי ↑</button><button id="leftBtn" aria-label="שמאלה">←</button></div>
+<section class="instructions"><div><span>01</span><p><b>זוזו בחופשיות</b><br><kbd>←</kbd> <kbd>→</kbd> או A / D</p></div><div><span>02</span><p><b>תכוונו למעלה</b><br><kbd>SPACE</kbd> כדי לירות צלצל</p></div><div><span>03</span><p><b>שמרו על החיים</b><br>בועות מתפצלות. אל תתנו להן לגעת בכם.</p></div></section>
+<footer><span>BUILT FOR ONE MORE ROUND.</span><span>גרסת ארקייד • נבנה בעזרת סוכני AI</span></footer>
+</main><script src="game.js"></script></body></html>
